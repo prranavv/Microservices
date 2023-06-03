@@ -28,6 +28,9 @@ func main() {
 	postrouter.HandleFunc("/", ph.Addproduct)
 	postrouter.Use(ph.MiddlewareProductValidation)
 
+	deleterouter := sm.Methods(http.MethodDelete).Subrouter()
+	deleterouter.HandleFunc("/", ph.DeleteProducts)
+	deleterouter.Use(ph.MiddlewareProductValidation)
 	s := &http.Server{
 		Addr:         ":9090",
 		Handler:      sm,

@@ -59,6 +59,16 @@ func (p *Products) ToJSON(w io.Writer) error {
 	return e.Encode(p)
 }
 
+func findIndexByProductID(id int) int {
+	for i, p := range productlist {
+		if p.ID == id {
+			return i
+		}
+	}
+
+	return -1
+}
+
 var ErrProductNotFound = fmt.Errorf("Prodtct not found")
 
 func findproduct(id int) (*Product, int, error) {
@@ -103,4 +113,15 @@ var productlist = []*Product{
 		CreatedOn:   time.Now().UTC().String(),
 		UpdatedOn:   time.Now().UTC().String(),
 	},
+}
+
+func DeleteProduct(id int) error {
+	i := findIndexByProductID(id)
+	if i == -1 {
+		return ErrProductNotFound
+	}
+
+	productlist = append(productlist[:i], productlist[i+1])
+
+	return nil
 }
